@@ -29,7 +29,7 @@ namespace TinkoffPaymentClientApi.Helpers {
         }
         var value = property.GetValue(parametr);
         var type = property.PropertyType;
-        object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
+        object defaultValue = null;
         if (object.Equals(value, defaultValue)) {
           continue;
         }
