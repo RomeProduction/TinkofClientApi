@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinkofClientApi", "TinkofClientApi\TinkofClientApi.csproj", "{2C222E28-66CF-404F-9EF3-94E921E576A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinkoffPaymentClientApi", "TinkoffPaymentClientApi\TinkoffPaymentClientApi.csproj", "{6B85D003-09CA-4B6A-81A2-0F8DB92E9EBC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C222E28-66CF-404F-9EF3-94E921E576A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C222E28-66CF-404F-9EF3-94E921E576A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C222E28-66CF-404F-9EF3-94E921E576A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C222E28-66CF-404F-9EF3-94E921E576A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B85D003-09CA-4B6A-81A2-0F8DB92E9EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B85D003-09CA-4B6A-81A2-0F8DB92E9EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B85D003-09CA-4B6A-81A2-0F8DB92E9EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B85D003-09CA-4B6A-81A2-0F8DB92E9EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE0A3229-01F7-423B-9720-5C4E74A3EA48}
+	EndGlobalSection
+EndGlobal
