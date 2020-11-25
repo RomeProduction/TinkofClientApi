@@ -18,7 +18,7 @@ namespace TinkoffPaymentClientApi.Helpers {
       if (string.IsNullOrEmpty(password)) {
         throw new ArgumentNullException(nameof(password), "Must be not empty");
       }
-      var properties = parametr.GetType().GetProperties();
+      var properties = parametr.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       var pairs = new Dictionary<string, object>() {
         { "Password", password }
       };
@@ -34,7 +34,7 @@ namespace TinkoffPaymentClientApi.Helpers {
           continue;
         }
         var propValue = property.GetValue(parametr);
-        if(type == typeof(bool)) {
+        if(type == typeof(bool) || type == typeof(bool?)) {
           propValue = (propValue + "").ToLower();
         }
         pairs[property.Name] = propValue;
