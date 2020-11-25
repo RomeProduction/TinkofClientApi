@@ -3,6 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>TinkoffPaymentClientApi</Company>
+    <RepositoryUrl>https://github.com/RomeProduction/TinkofClientApi</RepositoryUrl>
+    <Version>0.0.5.2</Version>
+    <RepositoryType>Public</RepositoryType>
+    <PackageReleaseNotes>fixed calculate token for Charge</PackageReleaseNotes>
+    <NeutralLanguage></NeutralLanguage>
   </PropertyGroup>
 
   <ItemGroup>
