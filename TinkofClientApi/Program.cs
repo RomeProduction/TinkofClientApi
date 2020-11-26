@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using TinkoffPaymentClientApi;
 using TinkoffPaymentClientApi.Commands;
+using TinkoffPaymentClientApi.Models;
 using TinkoffPaymentClientApi.ResponseEntity;
 
 namespace TinkofClientApi {
@@ -12,7 +13,17 @@ namespace TinkofClientApi {
         CancellationToken cancellationToken = CancellationToken.None;
         //должна быть в копейках
         decimal amount = 10 * 100;
-        var result = clientApi.InitAsync(new Init(Guid.NewGuid() + "", amount), cancellationToken).Result;
+        var result = clientApi.InitAsync(new Init(Guid.NewGuid() + "", amount) {
+          Receipt = new Receipt("test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.osn) {
+            ReceiptItems = new List<ReceiptItem> {
+              new ReceiptItem("test", 1, 10 * 100, TinkoffPaymentClientApi.Enums.ETax.vat20),
+            },
+          },
+          Data = new Dictionary<string, string> {
+            { "Email", "test@mail.ru" }
+          }
+        }
+        , cancellationToken).Result;
         Console.WriteLine("Init result: " + result.Success);
 
         var response = new TinkoffNotification {

@@ -12,7 +12,10 @@ namespace TinkoffPaymentClientApi.Models {
 
     public string EmailCompany { get; set; }
 
+    [JsonProperty("Items")]
     public IEnumerable<ReceiptItem> ReceiptItems { get; set; }
+
+    public Receipt(string email, ETaxation taxation) : this(null, email, taxation){}
 
     public Receipt(string phone, string email, ETaxation taxation) {
       if(string.IsNullOrEmpty(email) && string.IsNullOrEmpty(phone)) {

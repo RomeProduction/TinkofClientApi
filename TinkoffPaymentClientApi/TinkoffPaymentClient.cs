@@ -58,7 +58,7 @@ namespace TinkoffPaymentClientApi {
 
     private async Task<E> SendRequestPost<T, E>(T parameter, CancellationToken token)
       where T : BaseCommand
-      where E : class{
+      where E : class {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
 
@@ -85,6 +85,6 @@ namespace TinkoffPaymentClientApi {
       return null;
     }
 
-    public void Dispose() {}
+    public void Dispose() { }
   }
 }
