@@ -3,7 +3,7 @@ using TinkoffPaymentClientApi.Attributes;
 
 namespace TinkoffPaymentClientApi.Commands {
   public abstract class BaseCommand {
-    [IgnoreTokenCalculate]
+    [IgnoreTokenCalculate, JsonIgnore]
     internal abstract string CommandName { get; }
     [JsonProperty]
     [IgnoreTokenCalculate]

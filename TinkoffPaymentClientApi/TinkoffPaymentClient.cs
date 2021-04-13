@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -9,12 +11,25 @@ using TinkoffPaymentClientApi.Helpers;
 using TinkoffPaymentClientApi.ResponseEntity;
 
 namespace TinkoffPaymentClientApi {
-  public sealed class TinkoffPaymentClient: IDisposable {
+  public sealed class TinkoffPaymentClient {
+    private static readonly HttpClient DefaultHttpClient = new HttpClient();
+
     private readonly string _termianlKey;
     private readonly string _password;
-    private const string _baseUrl = "https://securepay.tinkoff.ru/v2/";
+    private readonly string _baseUrl;
+    private readonly HttpClient _httpClient;
 
-    public TinkoffPaymentClient(string terminalKey, string password) {
+    private const string DefaultBaseUrl = "https://securepay.tinkoff.ru/v2/";
+
+    public TinkoffPaymentClient(string terminalKey, string password): this(DefaultHttpClient, DefaultBaseUrl, terminalKey, password) {
+    }
+
+    public TinkoffPaymentClient(HttpClient httpClient, string terminalKey, string password): this(httpClient, DefaultBaseUrl, terminalKey, password) {
+    }
+    public TinkoffPaymentClient(string baseUrl, string terminalKey, string password): this(DefaultHttpClient, baseUrl, terminalKey, password) {
+    }
+
+    public TinkoffPaymentClient(HttpClient httpClient, string baseUrl, string terminalKey, string password) {
       if (string.IsNullOrEmpty(terminalKey)) {
         throw new ArgumentNullException(nameof(terminalKey), "Must be not empty");
       }
@@ -23,68 +38,125 @@ namespace TinkoffPaymentClientApi {
         throw new ArgumentNullException(nameof(password), "Must be not empty");
       }
       _password = password;
+      if (string.IsNullOrEmpty(baseUrl)) {
+        throw new ArgumentNullException(nameof(baseUrl), "Must be not empty");
+      }
+      _baseUrl = baseUrl.TrimEnd('/') + "/";
+      _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
-    public async Task<PaymentResponse> InitAsync(Init init, CancellationToken token) {
-      var result = await SendRequestPost<Init, PaymentResponse>(init, token);
-      return result;
-    }
+    public Task<PaymentResponse> InitAsync(Init init, CancellationToken token)
+      => PostAsync<Init, PaymentResponse>(init, token);
+    public PaymentResponse Init(Init init)
+      => Post<Init, PaymentResponse>(init);
 
-    public async Task<PaymentResponse> ChargeAsync(Charge charge, CancellationToken token) {
-      var result = await SendRequestPost<Charge, PaymentResponse>(charge, token);
-      return result;
-    }
+    public Task<PaymentResponse> ChargeAsync(Charge charge, CancellationToken token)
+      => PostAsync<Charge, PaymentResponse>(charge, token);
+    public PaymentResponse Charge(Charge charge)
+      => Post<Charge, PaymentResponse>(charge);
 
-    public async Task<ConfirmResponse> ConfirmAsync(Confirm confirm, CancellationToken token) {
-      var result = await SendRequestPost<Confirm, ConfirmResponse>(confirm, token);
-      return result;
-    }
+    public Task<ConfirmResponse> ConfirmAsync(Confirm confirm, CancellationToken token)
+      => PostAsync<Confirm, ConfirmResponse>(confirm, token);
+    public ConfirmResponse Confirm(Confirm confirm)
+      => Post<Confirm, ConfirmResponse>(confirm);
 
-    public async Task<CancelResponse> CancelAsync(Cancel cancel, CancellationToken token) {
-      var result = await SendRequestPost<Cancel, CancelResponse>(cancel, token);
-      return result;
-    }
+    public Task<CancelResponse> CancelAsync(Cancel cancel, CancellationToken token)
+      => PostAsync<Cancel, CancelResponse>(cancel, token);
+    public CancelResponse Cancel(Cancel cancel)
+      => Post<Cancel, CancelResponse>(cancel);
 
-    public async Task<Submit3DSAuthorizationResponse> Submit3DSAuthorizationAsync(Submit3DSAuthorization submit3ds, CancellationToken token) {
-      var result = await SendRequestPost<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds, token);
-      return result;
-    }
+    public Task<Submit3DSAuthorizationResponse> Submit3DSAuthorizationAsync(Submit3DSAuthorization submit3ds, CancellationToken token)
+      => PostAsync<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds, token);
+    public Submit3DSAuthorizationResponse Submit3DSAuthorization(Submit3DSAuthorization submit3ds)
+      => Post<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds);
 
-    public async Task<ResendResponse> ResendAsync(Resend resend, CancellationToken token) {
-      var result = await SendRequestPost<Resend, ResendResponse>(resend, token);
-      return result;
-    }
+    public Task<ResendResponse> ResendAsync(Resend resend, CancellationToken token)
+      => PostAsync<Resend, ResendResponse>(resend, token);
+    public ResendResponse Resend(Resend resend)
+      => Post<Resend, ResendResponse>(resend);
 
-
-    private async Task<E> SendRequestPost<T, E>(T parameter, CancellationToken token)
-      where T : BaseCommand
-      where E : class {
+    private HttpRequestMessage BuildRequest<T>(T parameter)
+    where T: BaseCommand {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
+      var request = new HttpRequestMessage(HttpMethod.Post, _baseUrl + parameter.CommandName);
+
+      var json = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
+        NullValueHandling = NullValueHandling.Ignore,
+      });
+      request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+      return request;
+    }
+    private static string ReadToEnd(Stream stream) {
+      if (stream == null) return null;
+
+      using (var reader = new StreamReader(stream)) {
+        return reader.ReadToEnd();
+      }
+    }
+
+    private E ProcessResponse<E>(int statusCode, Stream bodyStream) where E : class {
+      var body = ReadToEnd(bodyStream);
+      if (statusCode == 200)
+        return JsonConvert.DeserializeObject<E>(body);
+
+      throw new HttpRequestException($"Wrong answer reveived from {_baseUrl}, Status: {statusCode}, Body: {body}");
+    }
+
+    private async Task<E> PostAsync<T, E>(T parameter, CancellationToken token)
+      where T : BaseCommand
+      where E : class {
+
+      using (var request = BuildRequest(parameter)) {
+        using (var response = await _httpClient.SendAsync(request))
+          return ProcessResponse<E>((int)response.StatusCode, await response.Content.ReadAsStreamAsync());
+      }
+      //return JsonConvert.DeserializeObject<E>(response);
+    }
+
+#if NET5_0_OR_GREATER
+    private E Post<T, E>(T parameter)
+      where T : BaseCommand
+      where E : class {
+
+      using (var request = BuildRequest(parameter)) {
+        using (var response = _httpClient.Send(request))
+          return ProcessResponse<E>((int)response.StatusCode, response.Content.ReadAsStream());
+      }
+    }
+#else
+
+    private HttpWebRequest BuildWebRequest<T>(T parameter)
+    where T : BaseCommand {
+      parameter.TerminalKey = _termianlKey;
+      parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
+      var request = WebRequest.CreateHttp(_baseUrl + parameter.CommandName);
+      request.Method = "POST";
+      request.ContentType = "application/json";
 
       var json = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
         NullValueHandling = NullValueHandling.Ignore,
       });
 
-      var response = await SendRequestPost(parameter.CommandName, json, token);
-      if (string.IsNullOrEmpty(response)) {
-        return null;
+      var postBytes = Encoding.UTF8.GetBytes(json);
+      request.ContentLength = postBytes.Length;
+      using (var stream = request.GetRequestStream()) {
+        stream.Write(postBytes, 0, postBytes.Length);
       }
 
-      return JsonConvert.DeserializeObject<E>(response);
-    }
-    private async Task<string> SendRequestPost(string methodName, string json, CancellationToken token) {
-      var url = _baseUrl + methodName;
-      var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-      using (var client = new HttpClient()) {
-        var response = await client.PostAsync(url, httpContent, token);
-        if (response.IsSuccessStatusCode && response.Content != null) {
-          return await response.Content.ReadAsStringAsync();
-        }
-      }
-      return null;
+      return request;
     }
 
-    public void Dispose() { }
+    private E Post<T, E>(T parameter)
+      where T : BaseCommand
+      where E : class {
+      using (var response = (HttpWebResponse)BuildWebRequest(parameter).GetResponse()) {
+        return ProcessResponse<E>((int)response.StatusCode, response.GetResponseStream());
+      }
+    }
+
+
+#endif
   }
 }
