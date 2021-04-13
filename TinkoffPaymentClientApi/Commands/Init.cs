@@ -38,7 +38,7 @@ namespace TinkoffPaymentClientApi.Commands {
       if(isReccurent && string.IsNullOrEmpty(customerKey)) {
         throw new ArgumentNullException("If payment is reccurent - CustomerKey must be not empty");
       }
-      Language = ELanguageForm.ru;
+      Language = ELanguageForm.Ru;
       Amount = amount;
       OrderId = orderId;
       Recurrent = isReccurent ? "Y" : null;

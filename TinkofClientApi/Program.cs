@@ -14,9 +14,9 @@ namespace TinkofClientApi {
         //должна быть в копейках
         decimal amount = 10 * 100;
         var result = clientApi.InitAsync(new Init(Guid.NewGuid() + "", amount) {
-          Receipt = new Receipt("test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.osn) {
+          Receipt = new Receipt("test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.Osn) {
             ReceiptItems = new List<ReceiptItem> {
-              new ReceiptItem("test", 1, 10 * 100, TinkoffPaymentClientApi.Enums.ETax.vat20),
+              new ReceiptItem("test", 1, 10 * 100, TinkoffPaymentClientApi.Enums.ETax.Vat20),
             },
           },
           Data = new Dictionary<string, string> {

@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace TinkoffPaymentClientApi.Enums {
   [JsonConverter(typeof(StringEnumConverter))]
   public enum ELanguageForm {
-    en = 1,
-    ru,
+    [EnumMember(Value = "en")]
+    En = 1,
+    [EnumMember(Value = "ru")]
+    Ru,
   }
 }
