@@ -1,16 +1,24 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using TinkoffPaymentClientApi.Commands;
+using TinkoffPaymentClientApi.Enums;
 using TinkoffPaymentClientApi.Helpers;
+using TinkoffPaymentClientApi.Models;
 using TinkoffPaymentClientApi.ResponseEntity;
 
 namespace TinkoffPaymentClientApi {
+  /// <summary>
+  /// Клиент к API онлайн эквайринга Tinkoff
+  /// https://oplata.tinkoff.ru/develop/api/payments/
+  /// </summary>
   public sealed class TinkoffPaymentClient {
     private static readonly HttpClient DefaultHttpClient = new HttpClient();
 
@@ -45,8 +53,15 @@ namespace TinkoffPaymentClientApi {
       _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
+    /// <summary>
+    /// Метод создает платеж: продавец получает ссылку на платежную форму и должен перенаправить по ней покупателя.
+    /// </summary>
+    /// <param name="init"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<PaymentResponse> InitAsync(Init init, CancellationToken token)
       => PostAsync<Init, PaymentResponse>(init, token);
+    /// <inheritdoc cref="InitAsync(Commands.Init, CancellationToken)"/>
     public PaymentResponse Init(Init init)
       => Post<Init, PaymentResponse>(init);
 
@@ -55,36 +70,120 @@ namespace TinkoffPaymentClientApi {
     public PaymentResponse Charge(Charge charge)
       => Post<Charge, PaymentResponse>(charge);
 
+    /// <summary>
+    /// Подтверждает платеж и списывает ранее заблокированные средства.
+    /// <para>
+    /// Используется при двухстадийной оплате. При одностадийной оплате вызывается автоматически. Применим к платежу только в статусе AUTHORIZED и только один раз.
+    /// </para>
+    /// <para>
+    /// Сумма подтверждения не может быть больше заблокированной. Если сумма подтверждения меньше заблокированной, будет выполнено частичное подтверждение.
+    /// </para>
+    /// </summary>
+    /// <param name="confirm"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<ConfirmResponse> ConfirmAsync(Confirm confirm, CancellationToken token)
       => PostAsync<Confirm, ConfirmResponse>(confirm, token);
+    /// <inheritdoc cref="ConfirmAsync(Commands.Confirm, CancellationToken)"/>
     public ConfirmResponse Confirm(Confirm confirm)
       => Post<Confirm, ConfirmResponse>(confirm);
 
+    /// <summary>
+    /// Отменяет платеж
+    /// </summary>
+    /// <param name="cancel"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<CancelResponse> CancelAsync(Cancel cancel, CancellationToken token)
       => PostAsync<Cancel, CancelResponse>(cancel, token);
+    /// <inheritdoc cref="CancelAsync(Commands.Cancel, CancellationToken)"/>
     public CancelResponse Cancel(Cancel cancel)
       => Post<Cancel, CancelResponse>(cancel);
 
+    /// <summary>
+    /// Осуществляет проверку результатов прохождения 3-D Secure и при успешном результате прохождения 3-D Secure подтверждает инициированный платеж.
+    /// <para>
+    /// При использовании одностадийной оплаты осуществляет списание денежных средств с карты покупателя. При двухстадийной оплате осуществляет блокировку указанной суммы на карте покупателя.
+    /// </para>
+    /// </summary>
+    /// <param name="submit3ds"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<Submit3DSAuthorizationResponse> Submit3DSAuthorizationAsync(Submit3DSAuthorization submit3ds, CancellationToken token)
-      => PostAsync<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds, token);
+      => PostAsync<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds, false, token);
+    /// <inheritdoc cref="Submit3DSAuthorizationAsync(Commands.Submit3DSAuthorization, CancellationToken)"/>
     public Submit3DSAuthorizationResponse Submit3DSAuthorization(Submit3DSAuthorization submit3ds)
-      => Post<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds);
+      => Post<Submit3DSAuthorization, Submit3DSAuthorizationResponse>(submit3ds, false);
 
+    /// <summary>
+    /// Отправляет все неотправленные уведомления
+    /// </summary>
+    /// <param name="resend"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<ResendResponse> ResendAsync(Resend resend, CancellationToken token)
       => PostAsync<Resend, ResendResponse>(resend, token);
+    /// <inheritdoc cref="ResendAsync(Commands.Resend, CancellationToken)"/>
     public ResendResponse Resend(Resend resend)
       => Post<Resend, ResendResponse>(resend);
 
-    private HttpRequestMessage BuildRequest<T>(T parameter)
+    /// <summary>
+    /// Возвращает текущий статус платежа
+    /// </summary>
+    /// <param name="getState"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public Task<GetStateResponse> GetStateAsync(GetState getState, CancellationToken token)
+      => PostAsync<GetState, GetStateResponse>(getState, token);
+    /// <inheritdoc cref="GetStateAsync(Commands.GetState, CancellationToken)"/>
+    public GetStateResponse GetState(GetState getState)
+      => Post<GetState, GetStateResponse>(getState);
+
+    /// <summary>
+    /// Метод подтверждает платеж передачей реквизитов, а также списывает средства с карты покупателя при одностадийной оплате и блокирует указанную сумму при двухстадийной.
+    /// <para>
+    /// Используется, если у площадки есть сертификация PCI DSS и собственная платежная форма.
+    /// </para>
+    /// </summary>
+    /// <param name="finish"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public Task<FinishAuthorizeResponse> FinishAuthorizeAsync(FinishAuthorize finish, CancellationToken token)
+      => PostAsync<FinishAuthorize, FinishAuthorizeResponse>(finish, token);
+    /// <inheritdoc cref="FinishAuthorizeAsync(FinishAuthorize, CancellationToken)"/>
+    public FinishAuthorizeResponse FinishAuthorize(FinishAuthorize finish)
+      => Post<FinishAuthorize, FinishAuthorizeResponse>(finish);
+
+    /// <summary>
+    /// Метод позволяет отправить закрывающий чек в кассу.
+    /// Условия метода:
+    /// <list type="number">
+    /// <item>Закрывающий чек может быть отправлен если платежная сессия по первому чеку находится в статусе <see cref="EStatusResponse.Confirmed"/>.</item>
+    /// <item>В платежной сессии был передан объект <see cref="Receipt"/>.</item>
+    /// <item>В объекте <see cref="Receipt"/> был передан хотя бы один объект <see cref="ReceiptItem.PaymentMethod"/> <see cref="EPaymentMethod.FullPrepayment"/> или <see cref="EPaymentMethod.Prepayment"/> или <see cref="EPaymentMethod.Advance"/></item>
+    /// </list>
+    /// </summary>
+    /// <param name="sendClosingReceipt"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public Task<SendClosingReceiptResponse> SendClosingReceiptAsync(SendClosingReceipt sendClosingReceipt, CancellationToken token)
+      => PostAsync<SendClosingReceipt, SendClosingReceiptResponse>(sendClosingReceipt, token);
+    /// <inheritdoc cref="SendClosingReceiptAsync(SendClosingReceipt, CancellationToken)"/>
+    public SendClosingReceiptResponse SendClosingReceipt(SendClosingReceipt sendClosingReceipt)
+      => Post<SendClosingReceipt, SendClosingReceiptResponse>(sendClosingReceipt);
+
+    private HttpRequestMessage BuildRequest<T>(T parameter, bool json)
     where T: BaseCommand {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
       var request = new HttpRequestMessage(HttpMethod.Post, _baseUrl + parameter.CommandName);
 
-      var json = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
+      var data = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
         NullValueHandling = NullValueHandling.Ignore,
       });
-      request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+      request.Content = json
+        ? (HttpContent)new StringContent(data, Encoding.UTF8, "application/json")
+        : (HttpContent)new FormUrlEncodedContent(JsonConvert.DeserializeObject<Dictionary<string, string>>(data));
 
       return request;
     }
@@ -103,43 +202,50 @@ namespace TinkoffPaymentClientApi {
 
       throw new HttpRequestException($"Wrong answer reveived from {_baseUrl}, Status: {statusCode}, Body: {body}");
     }
+    private Task<E> PostAsync<T, E>(T parameter, CancellationToken token)
+      where T : BaseCommand
+      where E : class
+      => PostAsync<T, E>(parameter, true, token);
 
-    private async Task<E> PostAsync<T, E>(T parameter, CancellationToken token)
+    private async Task<E> PostAsync<T, E>(T parameter, bool json, CancellationToken token)
       where T : BaseCommand
       where E : class {
 
-      using (var request = BuildRequest(parameter)) {
-        using (var response = await _httpClient.SendAsync(request))
+      using (var request = BuildRequest(parameter, json)) {
+        using (var response = await _httpClient.SendAsync(request, token))
           return ProcessResponse<E>((int)response.StatusCode, await response.Content.ReadAsStreamAsync());
       }
       //return JsonConvert.DeserializeObject<E>(response);
     }
 
 #if NET5_0_OR_GREATER
-    private E Post<T, E>(T parameter)
+    private E Post<T, E>(T parameter, bool json = true)
       where T : BaseCommand
       where E : class {
 
-      using (var request = BuildRequest(parameter)) {
+      using (var request = BuildRequest(parameter, json)) {
         using (var response = _httpClient.Send(request))
           return ProcessResponse<E>((int)response.StatusCode, response.Content.ReadAsStream());
       }
     }
 #else
 
-    private HttpWebRequest BuildWebRequest<T>(T parameter)
+    private HttpWebRequest BuildWebRequest<T>(T parameter, bool json)
     where T : BaseCommand {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
       var request = WebRequest.CreateHttp(_baseUrl + parameter.CommandName);
       request.Method = "POST";
-      request.ContentType = "application/json";
+      request.ContentType = json ? "application/json" : "x-www-form-urlencoded";
 
-      var json = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
+      var data = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
         NullValueHandling = NullValueHandling.Ignore,
       });
 
-      var postBytes = Encoding.UTF8.GetBytes(json);
+      if (!json)
+        data = UrlEncode(data);
+
+      var postBytes = Encoding.UTF8.GetBytes(data);
       request.ContentLength = postBytes.Length;
       using (var stream = request.GetRequestStream()) {
         stream.Write(postBytes, 0, postBytes.Length);
@@ -148,10 +254,19 @@ namespace TinkoffPaymentClientApi {
       return request;
     }
 
-    private E Post<T, E>(T parameter)
+    private string UrlEncode(string data) {
+      var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
+      var sb = new StringBuilder();
+      foreach (var kv in dic)
+        sb.AppendFormat("{0}={1}&", kv.Key, WebUtility.UrlEncode(kv.Value));
+
+      return sb.ToString();
+    }
+
+    private E Post<T, E>(T parameter, bool json = true)
       where T : BaseCommand
       where E : class {
-      using (var response = (HttpWebResponse)BuildWebRequest(parameter).GetResponse()) {
+      using (var response = (HttpWebResponse)BuildWebRequest(parameter, json).GetResponse()) {
         return ProcessResponse<E>((int)response.StatusCode, response.GetResponseStream());
       }
     }

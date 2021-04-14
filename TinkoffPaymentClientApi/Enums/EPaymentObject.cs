@@ -27,7 +27,7 @@ namespace TinkoffPaymentClientApi.Enums {
     /// Услуга
     /// </summary>
     [EnumMember(Value = "service")]
-    service,
+    Service,
     /// <summary>
     /// Ставка азартной игры
     /// </summary>

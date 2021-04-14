@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using TinkoffPaymentClientApi.Enums;
 
 namespace TinkoffPaymentClientApi.Models {
+  /// <summary>
+  /// Данные по чеку
+  /// </summary>
   public class Receipt {
     /// <summary>
     /// Электронная почта покупателя. Обязательна если не задан <see cref="Phone"/>
