@@ -12,18 +12,15 @@ namespace TinkofClientApi {
       var clientApi = new TinkoffPaymentClient("DEMO", "TEST_Password");
         CancellationToken cancellationToken = CancellationToken.None;
       //должна быть в копейках
-      decimal amount = 10 * 100;
+      var amount = 10u * 100;
       var result = clientApi.InitAsync(new Init(Guid.NewGuid() + "", amount) {
-        Receipt = new Receipt("test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.Osn) {
-          Items = new List<ReceiptItem> {
+        Receipt = new Receipt(string.Empty, "test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.Osn,
+          new List<ReceiptItem> {
               new ReceiptItem("test", 1, 10 * 100, TinkoffPaymentClientApi.Enums.ETax.Vat20),
-            },
-        },
-        Data = new Dictionary<string, string> {
-            { "Email", "test@mail.ru" }
-          }
-      }
-      , cancellationToken).Result;
+          }),
+        }.SetEmail("test@mail.ru"),
+        cancellationToken).Result;
+
       Console.WriteLine("Init result: " + result.Success);
 
       var response = new TinkoffNotification {

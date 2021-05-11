@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using TinkoffPaymentClientApi.Enums;
 
 namespace TinkoffPaymentClientApi.Models {
@@ -20,7 +18,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.BankPayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public string OperationName { get; set; }
+    public string? OperationName { get; set; }
 
     /// <summary>
     /// Телефоны платежного агента. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -31,7 +29,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.PayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public List<string> Phones { get; set; }
+    public IEnumerable<string>? Phones { get; set; }
 
     /// <summary>
     /// Телефоны оператора по приему платежей. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -40,7 +38,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.PayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public List<string> ReceiverPhones { get; set; }
+    public IEnumerable<string>? ReceiverPhones { get; set; }
 
     /// <summary>
     /// Телефоны оператора перевода. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -49,7 +47,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.BankPayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public List<string> TransferPhones { get; set; }
+    public IEnumerable<string>? TransferPhones { get; set; }
 
     /// <summary>
     /// Наименование оператора перевода. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -58,7 +56,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.BankPayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public string OperatorName { get; set; }
+    public string? OperatorName { get; set; }
 
     /// <summary>
     /// Адрес оператора перевода. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -67,7 +65,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.BankPayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public string OperatorAddress { get; set; }
+    public string? OperatorAddress { get; set; }
 
     /// <summary>
     /// ИНН оператора перевода. Обязателен в случае если <see cref="AgentSign"/> принимает одно из значений:
@@ -76,6 +74,6 @@ namespace TinkoffPaymentClientApi.Models {
     /// <item><see cref="EAgentSign.BankPayingSubagent"/></item>
     /// </list>
     /// </summary>
-    public string OperatorInn { get; set; }
+    public string? OperatorInn { get; set; }
   }
 }

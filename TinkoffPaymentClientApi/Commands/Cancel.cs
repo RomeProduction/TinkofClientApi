@@ -14,16 +14,16 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// Сумма возврата в копейках
     /// </summary>
-    public decimal? Amount{ get; set; }
+    public uint? Amount{ get; set; }
     /// <summary>
     /// IP-адрес покупателя
     /// </summary>
-    public string IP { get; set; }
+    public string? IP { get; set; }
     /// <summary>
     /// В чеке указываются данные товаров, подлежащих возврату
     /// </summary>
     [IgnoreTokenCalculate]
-    public Receipt Receipt { get; set; }
+    public Receipt? Receipt { get; set; }
 
     internal override string CommandName => "Cancel";
 

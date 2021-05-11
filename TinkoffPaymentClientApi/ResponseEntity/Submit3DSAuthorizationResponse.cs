@@ -1,4 +1,5 @@
-﻿using TinkoffPaymentClientApi.Enums;
+﻿using Newtonsoft.Json;
+using TinkoffPaymentClientApi.Enums;
 
 namespace TinkoffPaymentClientApi.ResponseEntity {
   /// <summary>
@@ -8,26 +9,30 @@ namespace TinkoffPaymentClientApi.ResponseEntity {
     /// <summary>
     /// Сумма в копейках
     /// </summary>
-    public decimal Amount { get; set; }
+    [JsonRequired]
+    public uint Amount { get; set; }
     /// <summary>
     /// Номер заказа в системе Продавца
     /// </summary>
-    public string OrderId { get; set; }
+    [JsonRequired]
+    public string OrderId { get; set; } = string.Empty;
     /// <summary>
     /// Уникальный идентификатор транзакции в системе банка
     /// </summary>
-    public string PaymentId { get; set; }
+    [JsonRequired]
+    public string PaymentId { get; set; } = string.Empty;
     /// <summary>
     /// Идентификатор рекуррентного платежа
     /// </summary>
-    public string RebillId { get; set; }
+    public string? RebillId { get; set; }
     /// <summary>
     /// Идентификатор карты в системе банка. Передается только для сохраненной карты
     /// </summary>
-    public string CardId { get; set; }
+    public string? CardId { get; set; }
     /// <summary>
     /// Статус транзакции
     /// </summary>
+    [JsonRequired]
     public EStatusResponse Status { get; set; }
   }
 }

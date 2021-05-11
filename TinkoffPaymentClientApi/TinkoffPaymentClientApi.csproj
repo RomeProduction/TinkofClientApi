@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company></Company>
     <RepositoryUrl>https://github.com/RomeProduction/TinkofClientApi</RepositoryUrl>
-    <Version>0.1.3</Version>
+    <Version>0.2.0</Version>
     <RepositoryType>Public</RepositoryType>
     <PackageReleaseNotes></PackageReleaseNotes>
     <NeutralLanguage></NeutralLanguage>
@@ -17,6 +17,7 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>Latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

@@ -13,11 +13,11 @@ namespace TinkoffPaymentClientApi.Commands {
     /// </summary>
     [JsonProperty]
     [IgnoreTokenCalculate]
-    public string Token { get; internal set; }
+    public string? Token { get; internal set; }
     /// <summary>
     /// Идентификатор терминала. Выдается продавцу банком при заведении терминала. Будет подставлен автоматически
     /// </summary>
     [JsonProperty]
-    public string TerminalKey { get; internal set; }
+    public string? TerminalKey { get; internal set; }
   }
 }

@@ -12,7 +12,7 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// IP-адрес покупателя
     /// </summary>
-    public string IP { get; set; }
+    public string? IP { get; set; }
 
     internal override string CommandName => "GetState";
 

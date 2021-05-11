@@ -65,8 +65,18 @@ namespace TinkoffPaymentClientApi {
     public PaymentResponse Init(Init init)
       => Post<Init, PaymentResponse>(init);
 
+    /// <summary>
+    /// Метод осуществляет автоплатеж.
+    /// <para>
+    /// Всегда работает по типу одностадийной оплаты: во время выполнения метода на Notification URL будет отправлен синхронный запрос, на который требуется корректный ответ.
+    /// </para>
+    /// </summary>
+    /// <param name="charge"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<PaymentResponse> ChargeAsync(Charge charge, CancellationToken token)
       => PostAsync<Charge, PaymentResponse>(charge, token);
+    /// <inheritdoc cref="ChargeAsync(Commands.Charge, CancellationToken)"/>
     public PaymentResponse Charge(Charge charge)
       => Post<Charge, PaymentResponse>(charge);
 
@@ -121,11 +131,11 @@ namespace TinkoffPaymentClientApi {
     /// <param name="resend"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<ResendResponse> ResendAsync(Resend resend, CancellationToken token)
-      => PostAsync<Resend, ResendResponse>(resend, token);
-    /// <inheritdoc cref="ResendAsync(Commands.Resend, CancellationToken)"/>
-    public ResendResponse Resend(Resend resend)
-      => Post<Resend, ResendResponse>(resend);
+    public Task<ResendResponse> ResendAsync(Resend? resend = null, CancellationToken? token = null)
+      => PostAsync<Resend, ResendResponse>(resend ?? new Resend(), token ?? CancellationToken.None);
+    /// <inheritdoc cref="ResendAsync(Commands.Resend?, CancellationToken?)"/>
+    public ResendResponse Resend(Resend? resend = null)
+      => Post<Resend, ResendResponse>(resend ?? new Resend());
 
     /// <summary>
     /// Возвращает текущий статус платежа
@@ -172,6 +182,64 @@ namespace TinkoffPaymentClientApi {
     public SendClosingReceiptResponse SendClosingReceipt(SendClosingReceipt sendClosingReceipt)
       => Post<SendClosingReceipt, SendClosingReceiptResponse>(sendClosingReceipt);
 
+    /// <summary>
+    /// Метод регистрирует покупателя и его данные в системе продавца.
+    /// </summary>
+    /// <param name="addCustomer"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<CustomerResponse> AddCustomerAsync(AddCustomer addCustomer, CancellationToken cancellationToken)
+      => PostAsync<AddCustomer, CustomerResponse>(addCustomer, cancellationToken);
+    /// <inheritdoc cref="AddCustomerAsync(Commands.AddCustomer,CancellationToken)"/>
+    public CustomerResponse AddCustomer(AddCustomer addCustomer)
+      => Post<AddCustomer, CustomerResponse>(addCustomer);
+
+    /// <summary>
+    /// Метод возвращает список сохраненных карт зарегистрированного покупателя
+    /// </summary>
+    /// <param name="getCardList"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<CardListResponse>> GetCardListAsync(GetCardList getCardList, CancellationToken cancellationToken)
+      => PostAsync<GetCardList, IEnumerable<CardListResponse>>(getCardList, cancellationToken);
+    /// <inheritdoc cref="GetCardListAsync(Commands.GetCardList, CancellationToken)"/>
+    public IEnumerable<CardListResponse> GetCardList(GetCardList getCardList)
+      => Post<GetCardList, IEnumerable<CardListResponse>>(getCardList);
+
+    /// <summary>
+    /// Метод удаляет привязанную карту покупателя
+    /// </summary>
+    /// <param name="removeCard"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<RemoveCardResponse> RemoveCardAsync(RemoveCard removeCard, CancellationToken cancellationToken)
+      => PostAsync<RemoveCard, RemoveCardResponse>(removeCard, cancellationToken);
+    /// <inheritdoc cref="RemoveCardAsync(Commands.RemoveCard, CancellationToken)"/>
+    public RemoveCardResponse RemoveCard(RemoveCard removeCard)
+      => Post<RemoveCard, RemoveCardResponse>(removeCard);
+
+    /// <summary>
+    /// Метод регистрирует покупателя и его данные в системе продавца.
+    /// </summary>
+    /// <returns></returns>
+    public Task<GetCustomerResponse> GetCustomerAsync(GetCustomer getCustomer, CancellationToken cancellationToken)
+      => PostAsync<GetCustomer, GetCustomerResponse>(getCustomer, cancellationToken);
+    /// <inheritdoc cref="GetCustomerAsync(Commands.GetCustomer,CancellationToken)"/>
+    public GetCustomerResponse GetCustomer(GetCustomer getCustomer)
+      => Post<GetCustomer, GetCustomerResponse>(getCustomer);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="removeCustomer"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<CustomerResponse> RemoveCustomerAsync(RemoveCustomer removeCustomer, CancellationToken cancellationToken)
+      => PostAsync<RemoveCustomer, CustomerResponse>(removeCustomer, cancellationToken);
+    /// <inheritdoc cref="RemoveCustomerAsync(Commands.RemoveCustomer, CancellationToken)"/>
+    public CustomerResponse RemoveCustomer(RemoveCustomer removeCustomer)
+      => Post<RemoveCustomer, CustomerResponse>(removeCustomer);
+
     private HttpRequestMessage BuildRequest<T>(T parameter, bool json)
     where T: BaseCommand {
       parameter.TerminalKey = _termianlKey;
@@ -183,13 +251,11 @@ namespace TinkoffPaymentClientApi {
       });
       request.Content = json
         ? (HttpContent)new StringContent(data, Encoding.UTF8, "application/json")
-        : (HttpContent)new FormUrlEncodedContent(JsonConvert.DeserializeObject<Dictionary<string, string>>(data));
+        : (HttpContent)new FormUrlEncodedContent(JsonConvert.DeserializeObject<Dictionary<string, string>>(data)!);
 
       return request;
     }
     private static string ReadToEnd(Stream stream) {
-      if (stream == null) return null;
-
       using (var reader = new StreamReader(stream)) {
         return reader.ReadToEnd();
       }

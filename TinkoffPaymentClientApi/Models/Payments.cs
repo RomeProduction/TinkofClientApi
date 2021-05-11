@@ -5,6 +5,10 @@ namespace TinkoffPaymentClientApi.Models {
   /// Данные об оплате чека
   /// </summary>
   public class Payments {
+    public Payments(ulong electronic) {
+      Electronic = electronic;
+    }
+
     /// <summary>
     /// Вид оплаты "Наличные". Сумма к оплате в копейках не более 14 знаков.
     /// </summary>
@@ -12,7 +16,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// <summary>
     /// Вид оплаты "Безналичный". Сумма к оплате в копейках не более 14 знаков.
     /// </summary>
-    public UInt64 Electronic { get; set; }
+    public UInt64 Electronic { get; private set; }
     /// <summary>
     /// Вид оплаты "Предварительная оплата (Аванс)". Сумма к оплате в копейках не более 14 знаков.
     /// </summary>

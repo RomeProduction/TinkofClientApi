@@ -16,6 +16,14 @@ namespace TinkoffPaymentClientApi.Commands {
   /// </list>
   /// </summary>
   public class SendClosingReceipt : BaseCommand {
+    /// <summary>
+    /// Метод позволяет отправить закрывающий чек в кассу.
+    /// </summary>
+    /// <param name="receipt">Закрывающий чек может</param>
+    public SendClosingReceipt(Receipt receipt) {
+      Receipt = receipt ?? throw new ArgumentNullException(nameof(receipt));
+    }
+
     internal override string CommandName => "SendClosingReceipt";
 
     /// <summary>

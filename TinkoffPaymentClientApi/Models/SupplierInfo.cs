@@ -13,7 +13,7 @@ namespace TinkoffPaymentClientApi.Models {
     }
 
     [JsonConstructor]
-    public SupplierInfo(List<string> phones, string name, string inn) {
+    public SupplierInfo(IEnumerable<string> phones, string name, string inn) {
       Phones = phones;
       Name = name;
       Inn = inn;
@@ -22,15 +22,15 @@ namespace TinkoffPaymentClientApi.Models {
     /// <summary>
     /// Телефон поставщика
     /// </summary>
-    public List<string> Phones { get; set; }
+    public IEnumerable<string>? Phones { get; set; }
     /// <summary>
     /// Наименование поставщика
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
     /// <summary>
     /// ИНН поставщика
     /// </summary>
-    public string Inn { get; set; }
+    public string? Inn { get; set; }
 
   }
 }

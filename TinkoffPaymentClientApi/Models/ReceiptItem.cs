@@ -7,30 +7,30 @@ namespace TinkoffPaymentClientApi.Models {
   /// </summary>
   public class ReceiptItem {
     /// <summary>
-    /// Наименование товара	
+    /// Наименование товара
     /// </summary>
     [JsonProperty(PropertyName = "Name", Required = Required.Always)]
-    public string Name { get; set; }
+    public string Name { get; private set; }
     /// <summary>
-    /// Количество или вес товара	
+    /// Количество или вес товара
     /// </summary>
     [JsonProperty(PropertyName = "Quantity", Required = Required.Always)]
-    public int Quantity { get; set; }
+    public uint Quantity { get; private set; }
     /// <summary>
-    /// Цена за единицу товара в копейках	
+    /// Цена за единицу товара в копейках
     /// </summary>
     [JsonProperty(PropertyName = "Price", Required = Required.Always)]
-    public decimal Price { get; set; }
+    public uint Price { get; private set; }
     /// <summary>
     /// Ставка НДС
     /// </summary>
     [JsonProperty(PropertyName = "Tax", Required = Required.Always)]
-    public ETax Tax { get; set; }
+    public ETax Tax { get; private set; }
 
     /// <summary>
     /// Стоимость товара в копейках, произведение <see cref="Quantity"/> и <see cref="Price"/>
     /// </summary>
-    public decimal Amount => Price * Quantity;
+    public uint Amount => Price * Quantity;
     /// <summary>
     /// Штрих-код в требуемом формате. В зависимости от типа кассы требования могут отличаться:
     /// <list type="bullet">
@@ -40,7 +40,7 @@ namespace TinkoffPaymentClientApi.Models {
     /// </list>
     /// В случае передачи в запросе параметра Ean13 не прошедшего валидацию, возвращается неуспешный ответ с текстом ошибки в параметре message = "Неверный параметр Ean13". Валидация параметра Ean13 необходима как в объекте Receipt, так и в объекте Receipts.
     /// </summary>
-    public string Ean13 { get; set; }
+    public string? Ean13 { get; set; }
     /// <summary>
     /// Признак способа расчета
     /// </summary>
@@ -52,15 +52,15 @@ namespace TinkoffPaymentClientApi.Models {
     /// <summary>
     /// Данные агента. Используется при работе по агентской схеме.
     /// </summary>
-    public AgentData AgentData { get; set; }
+    public AgentData? AgentData { get; set; }
     /// <summary>
     /// Данные поставщика платежного агента.
     /// Используется при работе по агентской схеме.
     /// Требуется передать в случае если задан <see cref="AgentData"/>
     /// </summary>
-    public SupplierInfo SupplierInfo { get; set; }
+    public SupplierInfo? SupplierInfo { get; set; }
 
-    public ReceiptItem(string name, int quantity, decimal price, ETax tax) {
+    public ReceiptItem(string name, uint quantity, uint price, ETax tax) {
       Name = name;
       Quantity = quantity;
       Price = price;

@@ -1,5 +1,11 @@
-﻿namespace TinkoffPaymentClientApi.ResponseEntity {
+﻿using Newtonsoft.Json;
+
+namespace TinkoffPaymentClientApi.ResponseEntity {
   public class CustomerResponse : TinkoffResponse {
-    public string CustomerKey { get; set; }
+    /// <summary>
+    /// Идентификатор покупателя в системе продавца
+    /// </summary>
+    [JsonRequired]
+    public string CustomerKey { get; set; } = string.Empty;
   }
 }

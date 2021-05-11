@@ -24,16 +24,16 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// Электронная почта покупателя. Заполнить в случае если задан <see cref="SendEmail"/>
     /// </summary>
-    public string InfoEmail { get; set; }
+    public string? InfoEmail { get; set; }
     /// <summary>
     /// IP-адрес покупателя	
     /// </summary>
-    public string IP { get; set; }
+    public string? IP { get; set; }
 
     internal override string CommandName => "Charge";
 
     public Charge(string paymentId, string rebillId, 
-      bool? sendEmail = null, string infoEmail = null) {
+      bool? sendEmail = null, string? infoEmail = null) {
       if(sendEmail.HasValue && !sendEmail.Value) {
         sendEmail = null;
       }

@@ -20,16 +20,16 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// Сумма в копейках	
     /// </summary>
-    public decimal? Amount{ get; set; }
+    public uint? Amount{ get; set; }
     /// <summary>
     /// IP-адрес покупателя	
     /// </summary>
-    public string IP { get; set; }
+    public string? IP { get; set; }
     /// <summary>
     /// Чек
     /// </summary>
     [IgnoreTokenCalculate]
-    public Receipt Receipt { get; set; }
+    public Receipt? Receipt { get; set; }
 
     internal override string CommandName => "Confirm";
 

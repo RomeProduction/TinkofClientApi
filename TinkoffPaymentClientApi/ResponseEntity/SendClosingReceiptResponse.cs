@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TinkoffPaymentClientApi.ResponseEntity {
+﻿namespace TinkoffPaymentClientApi.ResponseEntity {
   /// <summary>
   /// Данные об отправке чека
   /// </summary>
