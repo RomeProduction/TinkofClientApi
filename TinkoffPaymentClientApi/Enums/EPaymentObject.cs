@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace TinkoffPaymentClientApi.Enums {
@@ -10,54 +11,67 @@ namespace TinkoffPaymentClientApi.Enums {
     /// <summary>
     /// Товар
     /// </summary>
-    commodity = 1,
+    [EnumMember(Value = "commodity")]
+    Commodity = 1,
     /// <summary>
     /// Подакцизный товар
     /// </summary>
-    excise,
+    [EnumMember(Value = "excise")]
+    Excise,
     /// <summary>
     /// Работа
     /// </summary>
-    job,
+    [EnumMember(Value = "job")]
+    Job,
     /// <summary>
     /// Услуга
     /// </summary>
-    service,
+    [EnumMember(Value = "service")]
+    Service,
     /// <summary>
     /// Ставка азартной игры
     /// </summary>
-    gambling_bet,
+    [EnumMember(Value = "gambling_bet")]
+    GamblingBet,
     /// <summary>
     /// Выигрыш азартной игры
     /// </summary>
-    gambling_prize,
+    [EnumMember(Value = "gambling_prize")]
+    GamblingPrize,
     /// <summary>
     /// Лотерейный билет
     /// </summary>
-    lottery,
+    [EnumMember(Value = "lottery")]
+    Lottery,
     /// <summary>
     /// Выигрыш лотереи
     /// </summary>
-    lottery_prize,
+    [EnumMember(Value = "lottery_prize")]
+    LotteryPrize,
     /// <summary>
     /// Предоставление результатов интеллектуальной деятельности
     /// </summary>
-    intellectual_activity,
+    [EnumMember(Value = "intellectual_activity")]
+    IntellectualActivity,
     /// <summary>
     /// Платеж
     /// </summary>
-    payment,
+    [EnumMember(Value = "payment")]
+    Payment,
     /// <summary>
     /// Агентское вознаграждение
     /// </summary>
-    agent_commission,
+    [EnumMember(Value = "agent_commission")]
+    AgentCommission,
     /// <summary>
     /// Составной предмет расчета
     /// </summary>
-    composite,
+    [EnumMember(Value = "composite")]
+    Composite,
     /// <summary>
     /// Иной предмет расчета
     /// </summary>
-    another,
+    [EnumMember(Value = "another")]
+    Another,
   }
 }

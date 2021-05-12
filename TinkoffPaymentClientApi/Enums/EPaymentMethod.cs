@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace TinkoffPaymentClientApi.Enums {
@@ -10,30 +11,37 @@ namespace TinkoffPaymentClientApi.Enums {
     /// <summary>
     /// Полный расчет
     /// </summary>
-    full_payment = 1,
+    [EnumMember(Value = "full_payment")]
+    FullPayment = 1,
     /// <summary>
     /// Предоплата 100%
     /// </summary>
-    full_prepayment,
+    [EnumMember(Value = "full_prepayment")]
+    FullPrepayment,
     /// <summary>
     /// Предоплата
     /// </summary>
-    prepayment,
+    [EnumMember(Value = "prepayment")]
+    Prepayment,
     /// <summary>
     /// Аванс
     /// </summary>
-    advance,
+    [EnumMember(Value = "advance")]
+    Advance,
     /// <summary>
     /// Частичный расчет и кредит
     /// </summary>
-    partial_payment,
+    [EnumMember(Value = "partial_payment")]
+    PartialPayment,
     /// <summary>
     /// Передача в кредит
     /// </summary>
-    credit,
+    [EnumMember(Value = "credit")]
+    Credit,
     /// <summary>
     /// Оплата кредита
     /// </summary>
-    credit_payment,
+    [EnumMember(Value = "credit_payment")]
+    CreditPayment,
   }
 }

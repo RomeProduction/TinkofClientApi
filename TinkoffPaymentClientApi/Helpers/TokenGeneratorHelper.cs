@@ -5,8 +5,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using TinkoffPaymentClientApi.Attributes;
-using TinkoffPaymentClientApi.Commands;
-using TinkoffPaymentClientApi.ResponseEntity;
 
 namespace TinkoffPaymentClientApi.Helpers {
   internal static class TokenGeneratorHelper {
@@ -29,7 +27,7 @@ namespace TinkoffPaymentClientApi.Helpers {
         }
         var value = property.GetValue(parametr);
         var type = property.PropertyType;
-        object defaultValue = null;
+        object? defaultValue = null;
         if (object.Equals(value, defaultValue)) {
           continue;
         }
@@ -37,7 +35,7 @@ namespace TinkoffPaymentClientApi.Helpers {
         if(type == typeof(bool) || type == typeof(bool?)) {
           propValue = (propValue + "").ToLower();
         }
-        pairs[property.Name] = propValue;
+        pairs[property.Name] = propValue ?? string.Empty;
       }
 
       var strValues = pairs.OrderBy(x => x.Key).Select(x => x.Value).Aggregate((x, y) => x + "" + y) + "";

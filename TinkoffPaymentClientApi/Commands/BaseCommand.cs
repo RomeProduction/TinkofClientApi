@@ -2,13 +2,22 @@
 using TinkoffPaymentClientApi.Attributes;
 
 namespace TinkoffPaymentClientApi.Commands {
+  /// <summary>
+  /// Базовый запрос к API
+  /// </summary>
   public abstract class BaseCommand {
-    [IgnoreTokenCalculate]
+    [IgnoreTokenCalculate, JsonIgnore]
     internal abstract string CommandName { get; }
+    /// <summary>
+    /// Подпись, будет посчитана и заполнена автоматически.
+    /// </summary>
     [JsonProperty]
     [IgnoreTokenCalculate]
-    internal string Token { get; set; }
+    public string? Token { get; internal set; }
+    /// <summary>
+    /// Идентификатор терминала. Выдается продавцу банком при заведении терминала. Будет подставлен автоматически
+    /// </summary>
     [JsonProperty]
-    internal string TerminalKey { get; set; }
+    public string? TerminalKey { get; internal set; }
   }
 }

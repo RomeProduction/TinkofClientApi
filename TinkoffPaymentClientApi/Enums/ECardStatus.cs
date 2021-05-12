@@ -1,4 +1,6 @@
-﻿namespace TinkoffPaymentClientApi.Enums {
+﻿using System.Runtime.Serialization;
+
+namespace TinkoffPaymentClientApi.Enums {
   /// <summary>
   /// Статус карты
   /// </summary>
@@ -6,14 +8,17 @@
     /// <summary>
     /// Активная
     /// </summary>
-    A = 1,
+    [EnumMember(Value = "A")]
+    Active,
     /// <summary>
     /// Неактивная
     /// </summary>
-    I,
+    [EnumMember(Value = "I")]
+    Inactive,
     /// <summary>
     /// Удаленная
     /// </summary>
-    D
+    [EnumMember(Value = "D")]
+    Deleted
   }
 }
