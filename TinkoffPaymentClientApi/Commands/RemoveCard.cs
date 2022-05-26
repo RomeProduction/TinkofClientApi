@@ -19,12 +19,12 @@ namespace TinkoffPaymentClientApi.Commands {
 
     public RemoveCard(string customerKey, string cardId) {
       if (string.IsNullOrEmpty(customerKey)) {
-        throw new ArgumentNullException(nameof(customerKey), "Must be not empty");
+        throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       CustomerKey = customerKey;
 
       if (string.IsNullOrEmpty(cardId)) {
-        throw new ArgumentNullException(nameof(cardId), "Must be not empty");
+        throw new ArgumentNullException(nameof(cardId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       CardId = cardId;
     }

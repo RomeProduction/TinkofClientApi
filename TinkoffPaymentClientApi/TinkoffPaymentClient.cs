@@ -39,15 +39,15 @@ namespace TinkoffPaymentClientApi {
 
     public TinkoffPaymentClient(HttpClient httpClient, string baseUrl, string terminalKey, string password) {
       if (string.IsNullOrEmpty(terminalKey)) {
-        throw new ArgumentNullException(nameof(terminalKey), "Must be not empty");
+        throw new ArgumentNullException(nameof(terminalKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       _termianlKey = terminalKey;
       if (string.IsNullOrEmpty(password)) {
-        throw new ArgumentNullException(nameof(password), "Must be not empty");
+        throw new ArgumentNullException(nameof(password), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       _password = password;
       if (string.IsNullOrEmpty(baseUrl)) {
-        throw new ArgumentNullException(nameof(baseUrl), "Must be not empty");
+        throw new ArgumentNullException(nameof(baseUrl), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       _baseUrl = baseUrl.TrimEnd('/') + "/";
       _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -240,7 +240,7 @@ namespace TinkoffPaymentClientApi {
     public CustomerResponse RemoveCustomer(RemoveCustomer removeCustomer)
       => Post<RemoveCustomer, CustomerResponse>(removeCustomer);
 
-    private HttpRequestMessage BuildRequest<T>(T parameter, bool json)
+    private HttpRequestMessage BuildRequest<T>(T parameter, bool json, out string requestBody)
     where T: BaseCommand {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
@@ -249,6 +249,7 @@ namespace TinkoffPaymentClientApi {
       var data = JsonConvert.SerializeObject(parameter, new JsonSerializerSettings {
         NullValueHandling = NullValueHandling.Ignore,
       });
+      requestBody = data;
       request.Content = json
         ? (HttpContent)new StringContent(data, Encoding.UTF8, "application/json")
         : (HttpContent)new FormUrlEncodedContent(JsonConvert.DeserializeObject<Dictionary<string, string>>(data)!);
@@ -261,12 +262,35 @@ namespace TinkoffPaymentClientApi {
       }
     }
 
-    private E ProcessResponse<E>(int statusCode, Stream bodyStream) where E : class {
+    private E ProcessResponse<T, E>(int statusCode, string request, Stream bodyStream) where E : class {
       var body = ReadToEnd(bodyStream);
-      if (statusCode == 200)
-        return JsonConvert.DeserializeObject<E>(body);
+      try {
+        if (statusCode == 200)
+          return JsonConvert.DeserializeObject<E>(body)!;
+      } catch(Exception ex) {
+        throw new TinkoffPaymentClientException (string.Format(Properties.Resources.ProcessResponse_ErrorOccuredWhileProcessing0For12Body3,
+            typeof(E).Name,
+            typeof(T).Name,
+            ex.Message,
+            body),
+          _baseUrl,
+          statusCode,
+          request,
+          body,
+          ex);
+      }
 
-      throw new HttpRequestException($"Wrong answer reveived from {_baseUrl}, Status: {statusCode}, Body: {body}");
+
+      throw new TinkoffPaymentClientException(string.Format(Properties.Resources.ProcessResponse_WrongAnswerReveivedFrom0For1Status2Body3,
+          _baseUrl, 
+          typeof(T).Name,
+          statusCode,
+          body),
+        _baseUrl,
+        statusCode,
+        request,
+        body
+        );
     }
     private Task<E> PostAsync<T, E>(T parameter, CancellationToken token)
       where T : BaseCommand
@@ -277,9 +301,9 @@ namespace TinkoffPaymentClientApi {
       where T : BaseCommand
       where E : class {
 
-      using (var request = BuildRequest(parameter, json)) {
+      using (var request = BuildRequest(parameter, json, out var requestBody)) {
         using (var response = await _httpClient.SendAsync(request, token))
-          return ProcessResponse<E>((int)response.StatusCode, await response.Content.ReadAsStreamAsync());
+          return ProcessResponse<T, E>((int)response.StatusCode, requestBody, await response.Content.ReadAsStreamAsync());
       }
       //return JsonConvert.DeserializeObject<E>(response);
     }
@@ -289,14 +313,14 @@ namespace TinkoffPaymentClientApi {
       where T : BaseCommand
       where E : class {
 
-      using (var request = BuildRequest(parameter, json)) {
+      using (var request = BuildRequest(parameter, json, out var requestBody)) {
         using (var response = _httpClient.Send(request))
-          return ProcessResponse<E>((int)response.StatusCode, response.Content.ReadAsStream());
+          return ProcessResponse<T, E>((int)response.StatusCode, requestBody, response.Content.ReadAsStream());
       }
     }
 #else
 
-    private HttpWebRequest BuildWebRequest<T>(T parameter, bool json)
+    private HttpWebRequest BuildWebRequest<T>(T parameter, bool json, out string requestBody)
     where T : BaseCommand {
       parameter.TerminalKey = _termianlKey;
       parameter.Token = TokenGeneratorHelper.GenerateToken(parameter, _password);
@@ -310,6 +334,7 @@ namespace TinkoffPaymentClientApi {
 
       if (!json)
         data = UrlEncode(data);
+      requestBody = data;
 
       var postBytes = Encoding.UTF8.GetBytes(data);
       request.ContentLength = postBytes.Length;
@@ -321,7 +346,7 @@ namespace TinkoffPaymentClientApi {
     }
 
     private string UrlEncode(string data) {
-      var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(data);
+      var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(data)!;
       var sb = new StringBuilder();
       foreach (var kv in dic)
         sb.AppendFormat("{0}={1}&", kv.Key, WebUtility.UrlEncode(kv.Value));
@@ -332,8 +357,8 @@ namespace TinkoffPaymentClientApi {
     private E Post<T, E>(T parameter, bool json = true)
       where T : BaseCommand
       where E : class {
-      using (var response = (HttpWebResponse)BuildWebRequest(parameter, json).GetResponse()) {
-        return ProcessResponse<E>((int)response.StatusCode, response.GetResponseStream());
+      using (var response = (HttpWebResponse)BuildWebRequest(parameter, json, out var requestBody).GetResponse()) {
+        return ProcessResponse<T, E>((int)response.StatusCode, requestBody, response.GetResponseStream());
       }
     }
 

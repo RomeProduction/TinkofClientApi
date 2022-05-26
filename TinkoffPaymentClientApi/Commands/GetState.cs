@@ -22,7 +22,7 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <param name="paymentId">Идентификатор платежа в системе банка</param>
     public GetState(string paymentId) {
       if (string.IsNullOrEmpty(paymentId)) {
-        throw new ArgumentNullException(nameof(paymentId), "Must be not empty");
+        throw new ArgumentNullException(nameof(paymentId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       PaymentId = paymentId;
     }

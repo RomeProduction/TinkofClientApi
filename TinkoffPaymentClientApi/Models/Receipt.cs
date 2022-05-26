@@ -44,7 +44,7 @@ namespace TinkoffPaymentClientApi.Models {
 
     public Receipt(string phone, string email, ETaxation taxation, IEnumerable<ReceiptItem> items) {
       if(string.IsNullOrEmpty(email) && string.IsNullOrEmpty(phone)) {
-        throw new ArgumentNullException("Phone or Email must be not empty");
+        throw new ArgumentNullException(TinkoffPaymentClientApi.Properties.Resources.Receipt_PhoneOrEmailShouldBeProvided);
       }
 
       Items = items;

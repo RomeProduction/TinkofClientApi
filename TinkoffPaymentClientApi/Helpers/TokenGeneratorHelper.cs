@@ -11,10 +11,10 @@ namespace TinkoffPaymentClientApi.Helpers {
     internal static string GenerateToken<T>(T parametr, string password)
       where T : class {
       if (parametr == null) {
-        throw new ArgumentNullException(nameof(parametr), "Must be not null");
+        throw new ArgumentNullException(nameof(parametr));
       }
       if (string.IsNullOrEmpty(password)) {
-        throw new ArgumentNullException(nameof(password), "Must be not empty");
+        throw new ArgumentNullException(nameof(password), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       var properties = parametr.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       var pairs = new Dictionary<string, object>() {
