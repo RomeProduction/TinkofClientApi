@@ -240,6 +240,20 @@ namespace TinkoffPaymentClientApi {
     public CustomerResponse RemoveCustomer(RemoveCustomer removeCustomer)
       => Post<RemoveCustomer, CustomerResponse>(removeCustomer);
 
+    /// <summary>
+    /// Метод возвращает статус заказа.
+    /// https://www.tinkoff.ru/kassa/develop/api/payments/checkorder-description/
+    /// </summary>
+    /// <param name="checkOrder"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<CheckOrderResponse> CheckOrderAsync(CheckOrder checkOrder, CancellationToken cancellationToken)
+      => PostAsync<CheckOrder, CheckOrderResponse>(checkOrder, cancellationToken);
+
+    /// <inheritdoc cref="CheckOrderAsync(Commands.CheckOrder, CancellationToken)"/>
+    public CheckOrderResponse CheckOrder(CheckOrder checkOrder)
+      => Post<CheckOrder, CheckOrderResponse>(checkOrder);
+
     private HttpRequestMessage BuildRequest<T>(T parameter, bool json, out string requestBody)
     where T: BaseCommand {
       parameter.TerminalKey = _termianlKey;

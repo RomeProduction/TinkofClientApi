@@ -24,12 +24,10 @@ namespace TinkoffPaymentClientApi.ResponseEntity {
     /// <summary>
     /// Статус платежа
     /// </summary>
-    [JsonRequired]
-    public EStatusResponse Status { get; set; }
+    public EStatusResponse? Status { get; set; }
     /// <summary>
     /// Ссылка на платежную форму
     /// </summary>
-    [JsonRequired]
-    public string PaymentURL { get; set; } = string.Empty;
+    public string? PaymentURL { get; set; }
   }
 }
