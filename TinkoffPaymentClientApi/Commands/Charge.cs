@@ -38,13 +38,13 @@ namespace TinkoffPaymentClientApi.Commands {
         sendEmail = null;
       }
       if (string.IsNullOrEmpty(paymentId)) {
-        throw new ArgumentNullException(nameof(paymentId), "Must be not empty");
+        throw new ArgumentNullException(nameof(paymentId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       if (string.IsNullOrEmpty(rebillId)) {
-        throw new ArgumentNullException(nameof(rebillId), "Must be not empty");
+        throw new ArgumentNullException(nameof(rebillId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       if(sendEmail.HasValue && string.IsNullOrEmpty(infoEmail)) {
-        throw new ArgumentNullException(nameof(infoEmail), "If SendEmail is true, then must be not empty");
+        throw new ArgumentNullException(nameof(infoEmail), TinkoffPaymentClientApi.Properties.Resources.Charge_EmailShouldBeProvidedWhenSendEmailIsTrue);
       }
 
       PaymentId = paymentId;

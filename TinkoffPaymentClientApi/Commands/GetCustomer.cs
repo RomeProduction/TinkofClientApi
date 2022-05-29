@@ -15,7 +15,7 @@ namespace TinkoffPaymentClientApi.Commands {
 
     public GetCustomer(string customerKey) {
       if (string.IsNullOrEmpty(customerKey)) {
-        throw new ArgumentNullException(nameof(customerKey), "Must be not empty");
+        throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       CustomerKey = customerKey;
     }

@@ -95,10 +95,10 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <param name="customerKey">Идентификатор покупателя в системе продавца <see cref="CustomerKey"/></param>
     public Init(string orderId, uint amount, bool isReccurent = false, string? customerKey = null) {
       if(amount <= 0) {
-        throw new ArgumentOutOfRangeException(nameof(amount), "Must be greater then zero");
+        throw new ArgumentOutOfRangeException(nameof(amount), Properties.Resources.Init_ShouldBeGreaterThenZero);
       }
       if(isReccurent && string.IsNullOrEmpty(customerKey)) {
-        throw new ArgumentNullException("If payment is reccurent - CustomerKey must be not empty");
+        throw new ArgumentNullException(TinkoffPaymentClientApi.Properties.Resources.Init_CustomerKeyShouldBeProvidedForRecurrentPayments);
       }
       Language = ELanguageForm.Ru;
       Amount = amount;

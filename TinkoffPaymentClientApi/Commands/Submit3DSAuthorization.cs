@@ -28,15 +28,15 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <param name="paRes">Шифрованная строка, содержащая результаты 3-D Secure аутентификации</param>
     public Submit3DSAuthorization(string paymentId, string md, string paRes) {
       if (string.IsNullOrEmpty(paymentId)) {
-        throw new ArgumentNullException(nameof(paymentId), "Must be not empty");
+        throw new ArgumentNullException(nameof(paymentId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       PaymentId = paymentId;
       if (string.IsNullOrEmpty(md)) {
-        throw new ArgumentNullException(nameof(md), "Must be not empty");
+        throw new ArgumentNullException(nameof(md), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       MD = md;
       if (string.IsNullOrEmpty(paRes)) {
-        throw new ArgumentNullException(nameof(paRes), "Must be not empty");
+        throw new ArgumentNullException(nameof(paRes), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
       }
       PaRes = paRes;
     }
