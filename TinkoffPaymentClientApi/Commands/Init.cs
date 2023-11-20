@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using TinkoffPaymentClientApi.Attributes;
 using TinkoffPaymentClientApi.Enums;
+using TinkoffPaymentClientApi.Json.Converters;
 using TinkoffPaymentClientApi.Models;
 
 namespace TinkoffPaymentClientApi.Commands {
@@ -40,6 +41,7 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// Cрок жизни ссылки (не более 90 дней)
     /// </summary>
+    [JsonConverter(typeof(TinkoffDateTimeConverter))]
     public DateTime? RedirectDueDate { get; set;}
     /// <summary>
     /// Адрес для получения http нотификаций
