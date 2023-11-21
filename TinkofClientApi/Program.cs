@@ -14,6 +14,7 @@ namespace TinkofClientApi {
       //должна быть в копейках
       var amount = 10u * 100;
       var result = clientApi.InitAsync(new Init(Guid.NewGuid() + "", amount) {
+          RedirectDueDate = DateTime.Now.AddDays(1),
         Receipt = new Receipt(string.Empty, "test@mail.ru", TinkoffPaymentClientApi.Enums.ETaxation.Osn,
           new List<ReceiptItem> {
               new ReceiptItem("test", 1, 10 * 100, TinkoffPaymentClientApi.Enums.ETax.Vat20),

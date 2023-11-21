@@ -14,13 +14,13 @@ namespace TinkoffPaymentClientApi.Commands {
     /// <summary>
     /// Номер заказа в системе Продавца	
     /// </summary>
-    public int OrderId { get; }
+    public string OrderId { get; }
 
     /// <summary>
     /// Конструктор
     /// </summary>
     /// <param name="orderId">Номер заказа в системе Продавца</param>
-    public CheckOrder(int orderId) {
+    public CheckOrder(string orderId) {
       OrderId = orderId;
     }
   }
