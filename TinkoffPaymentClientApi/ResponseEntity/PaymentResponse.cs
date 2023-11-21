@@ -9,17 +9,14 @@ namespace TinkoffPaymentClientApi.ResponseEntity {
     /// <summary>
     /// Сумма в копейках	
     /// </summary>
-    [JsonRequired]
     public uint Amount { get; set; }
     /// <summary>
     /// Идентификатор заказа в системе продавца
     /// </summary>
-    [JsonRequired]
     public string OrderId { get; set; } = string.Empty;
     /// <summary>
     /// Идентификатор платежа в системе банка
     /// </summary>
-    [JsonRequired]
     public string PaymentId { get; set; } = string.Empty;
     /// <summary>
     /// Статус платежа

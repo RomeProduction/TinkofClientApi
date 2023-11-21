@@ -14,13 +14,11 @@ namespace TinkoffPaymentClientApi.ResponseEntity {
     /// <summary>
     /// Номер заказа в системе Продавца	
     /// </summary>
-    [JsonRequired]
-    public int OrderId { get; set; }
+    public string? OrderId { get; set; }
 
     /// <summary>
     /// Детали
     /// </summary>
-    [JsonRequired]
     public Payment[] Payments { get; set; } = Array.Empty<Payment>();
 
   }
