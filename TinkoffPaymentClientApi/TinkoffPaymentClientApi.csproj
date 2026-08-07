@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net5;net6;net7;net8</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net10.0</TargetFrameworks>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company></Company>
-    <RepositoryUrl>https://github.com/RomeProduction/TinkofClientApi</RepositoryUrl>
+    <RepositoryUrl>https://github.com/ili/TinkofClientApi</RepositoryUrl>
     <VersionPrefix>0.5.0</VersionPrefix>
     <VersionSuffix>preview.1</VersionSuffix>
     <RepositoryType>Public</RepositoryType>
@@ -14,13 +14,15 @@
     <Authors>RomeProduction, ili</Authors>
     <Product>Tinkoff Payment API Client</Product>
     <Description>Unofficial .Net Tinkoff Payment API implementation</Description>
-    <PackageProjectUrl>https://github.com/RomeProduction/TinkofClientApi</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/ili/TinkofClientApi</PackageProjectUrl>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>Latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageId>TinkoffPaymentClientApi.Unofficial</PackageId>
+    
   </PropertyGroup>
 
   <ItemGroup>

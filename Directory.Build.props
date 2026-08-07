@@ -1,0 +1,13 @@
+	
+<Project>
+	<!--System.Text.Json generation workaround-->
+	<PropertyGroup Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<DisableSystemTextJsonSourceGenerator>true</DisableSystemTextJsonSourceGenerator>
+	</PropertyGroup>
+
+	<Target Name="CheckBuildEnvironment" BeforeTargets="PrepareForBuild">
+		<Message Importance="high" Text="VISUAL STUDIO" Condition="'$(BuildingInsideVisualStudio)' == 'true'" />
+		<Message Importance="high" Text="DOTNET CLI" Condition="'$(BuildingInsideVisualStudio)' != 'true'" />
+	</Target>
+</Project>
