@@ -21,8 +21,8 @@
     <LangVersion>Latest</LangVersion>
     <Nullable>enable</Nullable>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageId>TinkoffPaymentClientApi.Unofficial</PackageId>
-    
+    <RootNamespace>TinkoffPaymentClientApi</RootNamespace>
+   
   </PropertyGroup>
 
   <ItemGroup>
