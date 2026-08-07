@@ -1,30 +1,33 @@
 ﻿using System;
 
-namespace TinkoffPaymentClientApi.Commands {
-  /// <summary>
-  /// Запрос состояния платежа
-  /// </summary>
-  public class GetState: BaseCommand {
-    /// <summary>
-    /// Идентификатор платежа в системе банка
-    /// </summary>
-    public string PaymentId { get; private set; }
-    /// <summary>
-    /// IP-адрес покупателя
-    /// </summary>
-    public string? IP { get; set; }
+namespace TinkoffPaymentClientApi.Commands;
 
-    internal override string CommandName => "GetState";
+/// <summary>
+/// Запрос состояния платежа
+/// </summary>
+public class GetState : BaseCommand
+{
+	/// <summary>
+	/// Идентификатор платежа в системе банка
+	/// </summary>
+	public string PaymentId { get; private set; }
+	/// <summary>
+	/// IP-адрес покупателя
+	/// </summary>
+	public string? IP { get; set; }
 
-    /// <summary>
-    /// Конструктор
-    /// </summary>
-    /// <param name="paymentId">Идентификатор платежа в системе банка</param>
-    public GetState(string paymentId) {
-      if (string.IsNullOrEmpty(paymentId)) {
-        throw new ArgumentNullException(nameof(paymentId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
-      }
-      PaymentId = paymentId;
-    }
-  }
+	internal override string CommandName => "GetState";
+
+	/// <summary>
+	/// Конструктор
+	/// </summary>
+	/// <param name="paymentId">Идентификатор платежа в системе банка</param>
+	public GetState(string paymentId)
+	{
+		if (string.IsNullOrEmpty(paymentId))
+		{
+			throw new ArgumentNullException(nameof(paymentId), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
+		}
+		PaymentId = paymentId;
+	}
 }
