@@ -1,31 +1,34 @@
 ﻿using System;
 
-namespace TinkoffPaymentClientApi.Commands {
-  public class AddCustomer : BaseCommand {
-    /// <summary>
-    /// Идентификатор покупателя в системе продавца
-    /// </summary>
-    public string CustomerKey { get; private set; }
-    /// <summary>
-    /// Электронная почта покупателя
-    /// </summary>
-    public string? Email { get; set; }
-    /// <summary>
-    /// Телефон покупателя В формате +71234567890
-    /// </summary>
-    public string? Phone { get; set; }
-    /// <summary>
-    /// IP-адрес покупателя
-    /// </summary>
-    public string? IP { get; set; }
+namespace TinkoffPaymentClientApi.Commands;
 
-    internal override string CommandName => "AddCustomer";
+public class AddCustomer : BaseCommand
+{
+	/// <summary>
+	/// Идентификатор покупателя в системе продавца
+	/// </summary>
+	public string CustomerKey { get; private set; }
+	/// <summary>
+	/// Электронная почта покупателя
+	/// </summary>
+	public string? Email { get; set; }
+	/// <summary>
+	/// Телефон покупателя В формате +71234567890
+	/// </summary>
+	public string? Phone { get; set; }
+	/// <summary>
+	/// IP-адрес покупателя
+	/// </summary>
+	public string? IP { get; set; }
 
-    public AddCustomer(string customerKey) {
-      if (string.IsNullOrEmpty(customerKey)) {
-        throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
-      }
-      CustomerKey = customerKey;
-    }
-  }
+	internal override string CommandName => "AddCustomer";
+
+	public AddCustomer(string customerKey)
+	{
+		if (string.IsNullOrEmpty(customerKey))
+		{
+			throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
+		}
+		CustomerKey = customerKey;
+	}
 }

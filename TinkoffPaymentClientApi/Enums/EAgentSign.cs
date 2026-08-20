@@ -1,47 +1,36 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿namespace TinkoffPaymentClientApi.Enums;
 
-namespace TinkoffPaymentClientApi.Enums {
-  /// <summary>
-  /// Признак агента
-  /// </summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public enum EAgentSign {
-    /// <summary>
-    /// Банковский платежный агент
-    /// </summary>
-    [EnumMember(Value = "bank_paying_agent")]
-    BankPayingAgent = 1,
-    /// <summary>
-    /// Банковский платежный субагент
-    /// </summary>
-    [EnumMember(Value = "bank_paying_subagent")]
-    BankPayingSubagent,
-    /// <summary>
-    /// Платежный агент
-    /// </summary>
-    [EnumMember(Value = "paying_agent")]
-    PayingAgent,
-    /// <summary>
-    /// Платежный субагент
-    /// </summary>
-    [EnumMember(Value = "paying_subagent")]
-    PayingSubagent,
-    /// <summary>
-    /// Поверенный
-    /// </summary>
-    [EnumMember(Value = "attorney")]
-    Attorney,
-    /// <summary>
-    /// Комиссионер
-    /// </summary>
-    [EnumMember(Value = "commission_agent")]
-    CommissionAgent,
-    /// <summary>
-    /// Другой тип агента
-    /// </summary>
-    [EnumMember(Value = "another")]
-    Another,
-  }
+/// <summary>
+/// Признак агента
+/// </summary>
+public static class EAgentSign
+{
+	/// <summary>
+	/// Банковский платежный агент
+	/// </summary>
+	public const string BankPayingAgent = "bank_paying_agent";
+	/// <summary>
+	/// Банковский платежный субагент
+	/// </summary>
+	public const string BankPayingSubagent = "bank_paying_subagent";
+	/// <summary>
+	/// Платежный агент
+	/// </summary>
+	public const string PayingAgent = "paying_agent";
+	/// <summary>
+	/// Платежный субагент
+	/// </summary>
+	public const string PayingSubagent = "paying_subagent";
+	/// <summary>
+	/// Поверенный
+	/// </summary>
+	public const string Attorney = "attorney";
+	/// <summary>
+	/// Комиссионер
+	/// </summary>
+	public const string CommissionAgent = "commission_agent";
+	/// <summary>
+	/// Другой тип агента
+	/// </summary>
+	public const string Another = "another";
 }

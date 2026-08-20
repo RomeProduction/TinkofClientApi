@@ -1,23 +1,26 @@
 ﻿using System;
 
-namespace TinkoffPaymentClientApi.Commands {
-  public class RemoveCustomer : BaseCommand {
-    /// <summary>
-    /// Идентификатор покупателя в системе продавца
-    /// </summary>
-    public string CustomerKey { get; private set; }
-    /// <summary>
-    /// IP-адрес покупателя
-    /// </summary>
-    public string? IP { get; set; }
+namespace TinkoffPaymentClientApi.Commands;
 
-    internal override string CommandName => "RemoveCustomer";
+public class RemoveCustomer : BaseCommand
+{
+	/// <summary>
+	/// Идентификатор покупателя в системе продавца
+	/// </summary>
+	public string CustomerKey { get; private set; }
+	/// <summary>
+	/// IP-адрес покупателя
+	/// </summary>
+	public string? IP { get; set; }
 
-    public RemoveCustomer(string customerKey) {
-      if (string.IsNullOrEmpty(customerKey)) {
-        throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
-      }
-      CustomerKey = customerKey;
-    }
-  }
+	internal override string CommandName => "RemoveCustomer";
+
+	public RemoveCustomer(string customerKey)
+	{
+		if (string.IsNullOrEmpty(customerKey))
+		{
+			throw new ArgumentNullException(nameof(customerKey), Properties.Resources.TinkoffPaymentClient_ShouldNotBeEmpty);
+		}
+		CustomerKey = customerKey;
+	}
 }

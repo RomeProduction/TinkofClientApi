@@ -118,4 +118,7 @@
   <data name="Receipt_PhoneOrEmailShouldBeProvided" xml:space="preserve">
     <value>Phone or Email should be provided</value>
   </data>
+  <data name="NumeratorShouldBeLessThenDenominator" xml:space="preserve">
+    <value>Numerator should be less then Denominator</value>
+  </data>
 </root>

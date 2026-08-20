@@ -1,77 +1,60 @@
-﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿namespace TinkoffPaymentClientApi.Enums;
 
-namespace TinkoffPaymentClientApi.Enums {
-  /// <summary>
-  /// Предмет расчета
-  /// </summary>
-  [JsonConverter(typeof(StringEnumConverter))]
-  public enum EPaymentObject {
-    /// <summary>
-    /// Товар
-    /// </summary>
-    [EnumMember(Value = "commodity")]
-    Commodity = 1,
-    /// <summary>
-    /// Подакцизный товар
-    /// </summary>
-    [EnumMember(Value = "excise")]
-    Excise,
-    /// <summary>
-    /// Работа
-    /// </summary>
-    [EnumMember(Value = "job")]
-    Job,
-    /// <summary>
-    /// Услуга
-    /// </summary>
-    [EnumMember(Value = "service")]
-    Service,
-    /// <summary>
-    /// Ставка азартной игры
-    /// </summary>
-    [EnumMember(Value = "gambling_bet")]
-    GamblingBet,
-    /// <summary>
-    /// Выигрыш азартной игры
-    /// </summary>
-    [EnumMember(Value = "gambling_prize")]
-    GamblingPrize,
-    /// <summary>
-    /// Лотерейный билет
-    /// </summary>
-    [EnumMember(Value = "lottery")]
-    Lottery,
-    /// <summary>
-    /// Выигрыш лотереи
-    /// </summary>
-    [EnumMember(Value = "lottery_prize")]
-    LotteryPrize,
-    /// <summary>
-    /// Предоставление результатов интеллектуальной деятельности
-    /// </summary>
-    [EnumMember(Value = "intellectual_activity")]
-    IntellectualActivity,
-    /// <summary>
-    /// Платеж
-    /// </summary>
-    [EnumMember(Value = "payment")]
-    Payment,
-    /// <summary>
-    /// Агентское вознаграждение
-    /// </summary>
-    [EnumMember(Value = "agent_commission")]
-    AgentCommission,
-    /// <summary>
-    /// Составной предмет расчета
-    /// </summary>
-    [EnumMember(Value = "composite")]
-    Composite,
-    /// <summary>
-    /// Иной предмет расчета
-    /// </summary>
-    [EnumMember(Value = "another")]
-    Another,
-  }
+/// <summary>
+/// Предмет расчета
+/// </summary>
+public static class EPaymentObject
+{
+	/// <summary>
+	/// Товар
+	/// </summary>
+	public const string Commodity = "commodity";
+	/// <summary>
+	/// Подакцизный товар
+	/// </summary>
+	public const string Excise = "excise";
+	/// <summary>
+	/// Работа
+	/// </summary>
+	public const string Job = "job";
+	/// <summary>
+	/// Услуга
+	/// </summary>
+	public const string Service = "service";
+	/// <summary>
+	/// Ставка азартной игры
+	/// </summary>
+	public const string GamblingBet = "gambling_bet";
+	/// <summary>
+	/// Выигрыш азартной игры
+	/// </summary>
+	public const string GamblingPrize = "gambling_prize";
+	/// <summary>
+	/// Лотерейный билет
+	/// </summary>
+	public const string Lottery = "lottery";
+	/// <summary>
+	/// Выигрыш лотереи
+	/// </summary>
+	public const string LotteryPrize = "lottery_prize";
+	/// <summary>
+	/// Предоставление результатов интеллектуальной деятельности
+	/// </summary>
+	public const string IntellectualActivity = "intellectual_activity";
+	/// <summary>
+	/// Платеж
+	/// </summary>
+	public const string Payment = "payment";
+	/// <summary>
+	/// Агентское вознаграждение
+	/// </summary>
+	public const string AgentCommission = "agent_commission";
+	/// <summary>
+	/// Составной предмет расчета
+	/// </summary>
+	public const string Composite = "composite";
+	/// <summary>
+	/// Иной предмет расчета
+	/// </summary>
+	public const string Another = "another";
 }

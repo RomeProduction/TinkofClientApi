@@ -138,4 +138,7 @@
   <data name="Receipt_PhoneOrEmailShouldBeProvided" xml:space="preserve">
     <value>Должны быть заданы телефон или электропочта</value>
   </data>
+  <data name="NumeratorShouldBeLessThenDenominator" xml:space="preserve">
+    <value>Числитель должен быть строго больше знаменателя</value>
+  </data>
 </root>

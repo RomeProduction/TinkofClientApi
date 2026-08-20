@@ -1,16 +1,13 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿namespace TinkoffPaymentClientApi.Enums;
 
-namespace TinkoffPaymentClientApi.Enums {
-  [JsonConverter(typeof(StringEnumConverter))]
-  public enum EPayType {
-    /// <summary>
-    /// Одностадийная
-    /// </summary>
-    O = 1,
-    /// <summary>
-    /// Двухстадийная
-    /// </summary>
-    T
-  }
+public static class EPayType
+{
+	/// <summary>
+	/// Одностадийная
+	/// </summary>
+	public const string O = "O";
+	/// <summary>
+	/// Двухстадийная
+	/// </summary>
+	public const string T = "T";
 }
